@@ -1,0 +1,58 @@
+#include <stdio.h>
+#define PATH_LIMIT 20
+
+typedef struct _path{
+    char path[PATH_LIMIT];
+} pathing;
+
+pathing generatePath(pathing tempPath, int pathSteps, pathing lastPath);
+
+
+int main(int argc, char* argv[]){
+    pathing lastPath;
+    int i;
+    for (i = 0; i < PATH_LIMIT-1; i++){
+        lastPath.path[i] = 'R';
+    }
+    lastPath.path[i] = '\0';
+    pathing tempPath;
+    for (i = 0; i < PATH_LIMIT; i++){
+        tempPath.path[i] = '\0';
+    }
+    int pathSteps = 0;
+    printf("%s\n", lastPath.path);
+    generatePath(tempPath, pathSteps, lastPath);
+
+    return 0;
+}
+
+pathing generatePath(pathing tempPath, int pathSteps, pathing lastPath){
+    printf("pathSteps = %d\npath = %s\n", pathSteps, tempPath.path);
+    if (tempPath.path != lastPath.path){ 
+        if (pathSteps == PATH_LIMIT-1){
+            printf("Path limit reached.\n");
+            tempPath.path[pathSteps] = '\0';
+        } else if (tempPath.path[pathSteps++] == '\0') {
+             printf("pathSteps is now %d\n", pathSteps);
+             pathSteps--;
+             printf("pathSteps is now %d\n", pathSteps);
+             tempPath.path[pathSteps] = 'L';
+             printf("Appended L.\npath = %s\n", tempPath.path);
+             tempPath = generatePath(tempPath, pathSteps++, lastPath);
+            
+              if (tempPath.path != lastPath.path){    
+                 printf("pathSteps is now %d\n", pathSteps);
+                 pathSteps--;
+                 printf("pathSteps is now %d\n", pathSteps);
+                 tempPath.path[pathSteps] = 'R';
+                 printf("Appended R.\n");
+                 tempPath = generatePath(tempPath, pathSteps++, lastPath);
+             }
+             if (tempPath.path != lastPath.path){
+                 tempPath.path[pathSteps] = '\0';
+             }
+        }
+    }
+    return tempPath;
+}
+

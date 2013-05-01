@@ -1,0 +1,54 @@
+########################################################################
+# Clean Makefile for Assignment 2 :: CS1927 (2012s2) by John Cramb
+########################################################################
+
+# variables
+
+SRC       := $(wildcard *.c)
+OBJ       := $(SRC:%.c=%.o) lexer.o
+BIN       := flan
+
+# compile options
+
+CC        := gcc
+VERSION   := 0.0.7
+CFLAGS    := -ggdb -std=c99 -pedantic -g
+LDFLAGS   := -lm
+LEX       := flex
+LEXFLAGS  := -t 
+GENHEADER := ./genHeader.pl
+
+# build targets
+
+all: $(BIN).exe 
+
+lexer.c: lexer.l $(GENHEADER)
+	@$(LEX) $(LEXFLAGS) lexer.l > lexer.c
+
+lexer.h: lexer.c
+	@$(GENHEADER) lexer.l
+
+build/%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo $@
+
+.PHONY: all checkdirs clean
+
+$(BIN).exe: checkdirs $(BIN)
+
+$(BIN): lexer.h $(OBJ)
+	@$(CC) $^ -o $(BIN) $(LDFLAGS)
+	@echo "\n... build complete ..."
+
+checkdirs: $(BUILD_DIR)
+
+$(BUILD_DIR):
+	@mkdir -p $@
+
+clean:
+	@rm -rf $(BUILD_DIR)
+	@rm -rf $(BIN)
+	@rm -rf lexer.c lexer.h image.svg
+	@echo cleaned.
+
+# EOF

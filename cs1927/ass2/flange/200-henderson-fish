@@ -1,0 +1,196 @@
+-- Basic images from http://www.frank-buss.de/lisp/functional.html
+-- Originally from Peter Henderson's "Functional Geometry" paper.
+-- The GLog paper generalises this to an infinite image.
+
+-- Basic pictures.
+
+p :: Picture
+p = Canvas 16 16
+      [ Line (4, 4) (6, 0)
+      , Line (0, 3) (3, 4)
+      , Line (3, 4) (0, 8)
+      , Line (0, 8) (0, 3)
+      , Line (4, 5) (7, 6)
+      , Line (7, 6) (4, 10)
+      , Line (4, 10) (4, 5)
+      , Line (11, 0) (10, 4)
+      , Line (10, 4) (8, 8)
+      , Line (8, 8) (4, 13)
+      , Line (4, 13) (0, 16)
+      , Line (11, 0) (14, 2)
+      , Line (14, 2) (16, 2)
+      , Line (10, 4) (13, 5)
+      , Line (13, 5) (16, 4)
+      , Line (9, 6) (12, 7)
+      , Line (12, 7) (16, 6)
+      , Line (8, 8) (12, 9)
+      , Line (12, 9) (16, 8)
+      , Line (8, 12) (16, 10)
+      , Line (0, 16) (6, 15)
+      , Line (6, 15) (8, 16)
+      , Line (8, 16) (12, 12)
+      , Line (12, 12) (16, 12)
+      , Line (10, 16) (12, 14)
+      , Line (12, 14) (16, 13)
+      , Line (12, 16) (13, 15)
+      , Line (13, 15) (16, 14)
+      , Line (14, 16) (16, 15)
+             -- Add a box ala Henderson.
+      , Line (16, 0) (16, 8)
+      , Line (16, 12) (16, 16)
+      ]
+;
+q :: Picture
+q = Canvas 16 16
+      [ Line (2, 0) (4, 5)
+      , Line (4, 5) (4, 7)
+      , Line (4, 0) (6, 5)
+      , Line (6, 5) (6, 7)
+      , Line (6, 0) (8, 5)
+      , Line (8, 5) (8, 8)
+      , Line (8, 0) (10, 6)
+      , Line (10, 6) (10, 9)
+      , Line (10, 0) (14, 11)
+      , Line (12, 0) (13, 4)
+      , Line (13, 4) (16, 8)
+      , Line (16, 8) (15, 10)
+      , Line (15, 10) (16, 16)
+      , Line (16, 16) (12, 10)
+      , Line (12, 10) (6, 7)
+      , Line (6, 7) (4, 7)
+      , Line (4, 7) (0, 8)
+      , Line (13, 0) (16, 6)
+      , Line (14, 0) (16, 4)
+      , Line (15, 0) (16, 2)
+      , Line (0, 10) (7, 11)
+      , Line (9, 12) (10, 10)
+      , Line (10, 10) (12, 12)
+      , Line (12, 12) (9, 12)
+      , Line (8, 15) (9, 13)
+      , Line (9, 13) (11, 15)
+      , Line (11, 15) (8, 15)
+      , Line (0, 12) (3, 13)
+      , Line (3, 13) (7, 15)
+      , Line (7, 15) (8, 16)
+      , Line (2, 16) (3, 13)
+      , Line (4, 16) (5, 14)
+      , Line (6, 16) (7, 15)
+             -- Add a box ala Henderson.
+      , Line (0, 0) (8, 0)
+      , Line (12, 0) (16, 0)
+      ]
+;
+
+r :: Picture
+r = Canvas 16 16
+      [ Line (0, 12) (1, 14)
+      , Line (0, 8) (2, 12)
+      , Line (0, 4) (5, 10)
+      , Line (0, 0) (8, 8)
+      , Line (1, 1) (4, 0)
+      , Line (2, 2) (8, 0)
+      , Line (3, 3) (8, 2)
+      , Line (8, 2) (12, 0)
+      , Line (5, 5) (12, 3)
+      , Line (12, 3) (16, 0)
+      , Line (0, 16) (2, 12)
+      , Line (2, 12) (8, 8)
+      , Line (8, 8) (14, 6)
+      , Line (14, 6) (16, 4)
+      , Line (6, 16) (11, 10)
+      , Line (11, 10) (16, 6)
+      , Line (11, 16) (12, 12)
+      , Line (12, 12) (16, 8)
+      , Line (12, 12) (16, 16)
+      , Line (13, 13) (16, 10)
+      , Line (14, 14) (16, 12)
+      , Line (15, 15) (16, 14)
+      ]
+;
+
+s :: Picture
+s = Canvas 16 16
+      [ Line (0, 0) (4, 2)
+      , Line (4, 2) (8, 2)
+      , Line (8, 2) (16, 0)
+      , Line (0, 4) (2, 1)
+      , Line (0, 6) (7, 4)
+      , Line (0, 8) (8, 6)
+      , Line (0, 10) (7, 8)
+      , Line (0, 12) (7, 10)
+      , Line (0, 14) (7, 13)
+      , Line (8, 16) (7, 13)
+      , Line (7, 13) (7, 8)
+      , Line (7, 8) (8, 6)
+      , Line (8, 6) (10, 4)
+      , Line (10, 4) (16, 0)
+      , Line (10, 16) (11, 10)
+      , Line (10, 6) (12, 4)
+      , Line (12, 4) (12, 7)
+      , Line (12, 7) (10, 6)
+      , Line (13, 7) (15, 5)
+      , Line (15, 5) (15, 8)
+      , Line (15, 8) (13, 7)
+      , Line (12, 16) (13, 13)
+      , Line (13, 13) (15, 9)
+      , Line (15, 9) (16, 8)
+      , Line (13, 13) (16, 14)
+      , Line (14, 11) (16, 12)
+      , Line (15, 9) (16, 10)
+      ]
+;
+
+-- Combinators.
+quartet :: Picture -> Picture -> Picture -> Picture -> Picture
+quartet p1 p2 p3 p4 = Above 1 1 (Beside 1 1 p1 p2) (Beside 1 1 p3 p4)
+;
+
+cycle :: Picture -> Picture
+cycle p = quartet p (Rotate (Rotate (Rotate p))) (Rotate p) (Rotate (Rotate p))
+;
+
+t :: Picture
+t = quartet p q r s
+;
+
+u :: Picture
+u = cycle (Rotate q)
+;
+
+v :: Picture
+v = cycle (Rotate t)
+;
+
+side1 :: Picture
+side1 = quartet Empty Empty (Rotate t) t
+;
+side2 :: Picture
+side2 = quartet side1 side1 (Rotate t) t
+;
+corner1 :: Picture
+corner1 = quartet Empty Empty Empty u
+;
+corner2 :: Picture
+corner2 = quartet corner1 side1 (Rotate side1) u
+;
+
+nonet :: Picture -> Picture -> Picture -> Picture -> Picture -> Picture -> Picture -> Picture -> Picture -> Picture
+nonet p1 p2 p3
+      p4 p5 p6
+      p7 p8 p9 =
+  Above 1 2 (Beside 1 2 p1 (Beside 1 1 p2 p3))
+            (Above 1 1 (Beside 1 2 p4 (Beside 1 1 p5 p6))
+                       (Beside 1 2 p7 (Beside 1 1 p8 p9)))
+;
+corner :: Picture
+corner = nonet corner2 side2 side2
+               (Rotate side2) u (Rotate t)
+               (Rotate side2) (Rotate t) (Rotate q)
+;
+
+squarelimit :: Picture
+squarelimit = cycle corner
+;
+
+main = squarelimit
+-- main = t

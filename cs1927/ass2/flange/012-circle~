@@ -1,0 +1,1 @@
+main = Canvas 100 100 [Circle (50, 50) 15]

@@ -1,0 +1,69 @@
+polyline :: [(Num, Num)] -> [Shape]
+polyline pts =
+  match pts with
+      []   -> []
+    | p:ps ->
+        let mkP :: (Num, Num) -> [(Num, Num)] -> [Shape]
+            mkP prev qqs =
+              match qqs with
+                  []   -> [] -- Don't close the polygon.
+                | q:qs -> (Line prev q) : (mkP q qs)
+              end ;
+         in mkP p ps
+  end
+;
+
+leftFish :: Picture
+leftFish =
+    Canvas 1 1
+      ((Line (1/8, 3/5) (1, 4/5)) : (polyline [ (1, 1), (1/8, 3/5), (1, 1/8), (3/4, 0), (1, 0)]))
+;
+
+rightFish :: Picture
+rightFish = Flip leftFish
+;
+
+fish :: Picture
+fish = Beside 1 1 leftFish rightFish
+;
+
+sideFish :: Picture
+sideFish = Rotate fish
+;
+
+matrix :: [[Picture]] -> Picture
+matrix = col
+;
+
+col :: [[Picture]] -> Picture
+col pps =
+  let mkP :: [[Picture]] -> (Picture, Num)
+      mkP pps = match pps with
+                    []   -> (Empty, 0)
+                  | p:ps -> match mkP ps with (pic, n) -> (Above 1 n (row p) pic, n + 1) end
+                end ;
+  in match mkP pps with (p, n) -> p end
+;
+
+row :: [Picture] -> Picture
+row pps =
+  let mkP :: [Picture] -> (Picture, Num)
+      mkP pps = match pps with
+                    []   -> (Empty, 0)
+                  | p:ps -> match mkP ps with (pic, n) -> (Beside 1 n p pic, n + 1) end
+                end ;
+  in match mkP pps with (p, n) -> p end
+;
+
+main =
+  let u :: Picture
+      u = fish ;
+      l :: Picture
+      l = sideFish ;
+      d :: Picture
+      d = Rotate l ;
+      r :: Picture
+      r = Rotate d ;
+  in matrix [[d, l,     l],
+             [d, Empty, u],
+             [r, r,     u]]

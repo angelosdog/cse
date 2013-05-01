@@ -1,0 +1,42 @@
+B
+A
+N/A
+B
+D
+D
+N/A
+D
+E
+C
+
+Question 11
+[A] f swaps the value of two variables x and y such that the number stored at y will be larger than the one stored at x.
+[B] The program will sort a, b, and c in ascending order
+[C]
+a = 2 b = 1 c = 3
+a = 1 b = 2 c = 3
+
+Question 12
+hanoi(2, 'A', 'B', 'C')
+hanoi(1, 'A', 'C', 'B')
+hanoi(0, 'A', 'B', 'C')
+hanoi(0, 'B', 'C', 'A')
+hanoi(1, 'C', 'B', 'A')
+hanoi(0, 'C', 'A', 'B')
+hanoi(0, 'A', 'B', 'C')
+
+Question 13
+[A] 4 bytes
+[B] No memory in the heap to allocate
+[C] a[1] = 0x803B004, a[5] = 0x803B014, a[15] = 0x803B03C
+[D] 2
+
+Question 14
+Line 10
+Node *tmp;
+Line 14 (2 errors)
+for (tmp = list->next; tmp != NULL; tmp = tmp->next);
+Line 17
+returnNode = newItem;
+
+

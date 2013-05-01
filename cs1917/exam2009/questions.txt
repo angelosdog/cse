@@ -1,0 +1,1 @@
+printf("%d\n", x); will print 00101010

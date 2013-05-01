@@ -1,0 +1,503 @@
+
+!!section banner
+                                   #    #        #####
+ #    #   #####  #####     ##     ##    #    #  #     #
+ #    #     #    #    #   #  #   # #    #    #        #
+ #    #     #    #    #  #    #    #    #######  #####
+ #    #     #    #####   ######    #         #        #
+  #  #      #    #   #   #    #    #         #  #     #
+   ##       #    #    #  #    #  #####       #   #####
+
+San, Tony                               vtra143
+Tran, Vincent                           vtra143
+
+Submissions:-
+
+S 0     Fri 27 Apr 00:00:00 2012        vtra143 tue16-pipe task2 0:0
+
+Mon Apr 30 16:11:43 2012                ## labimac.orchestra.cse.unsw.EDU.AU ##
+!!section listing
+task2-vincent.tran-tony.san-v4/mandelbrot.c
+tar: task2-vincent.tran-tony.san-v4/mandelbrot.c: implausibly old time stamp 1970-01-01 10:00:00
+task2-vincent.tran-tony.san-v4/pixelColor.c
+tar: task2-vincent.tran-tony.san-v4/pixelColor.c: implausibly old time stamp 1970-01-01 10:00:00
+
+===============================================================================
+-rw-r----- 1 cs1917 cs1917 8497 2012-04-30 16:11 mandelbrot.c
+===============================================================================
+
+     1  /*
+     2   * Creates a bmp server to serve an image of a mandelbrot set
+     3   *
+     4   * Created by Vincent Tran and Tony San
+     5   */
+     6
+     7  #include <stdlib.h>
+     8  #include <stdio.h>
+     9  #include <netinet/in.h>
+    10  #include <string.h>
+    11  #include <assert.h>
+    12  #include <unistd.h>
+    13  #include <math.h>
+    14  #include "pixelColor.h"
+    15
+    16
+    17  int waitForConnection (int serverSocket);
+    18  int makeServerSocket (int portno);
+    19  void serveBMP (int socket, double centreX, double centreY, int zoom);
+    20  static void serveHTML (int socket);
+    21  typedef struct _color{
+    22          unsigned char red;
+    23          unsigned char green;
+    24          unsigned char blue;
+    25  }color;
+    26  color mandelbrotPixelColor(double testXPoint, double testYPoint, double centreX, double centreY, int zoom);
+                     ^
+                     + ============================================================= +
+                     + Function prototypes should go below #defines. typedef should  +
+                     + not be mixed up in the middle of function prototypes          +
+                     + ============================================================= +
+    27
+    28  #define SIMPLE_SERVER_VERSION 1.0
+    29  #define REQUEST_BUFFER_SIZE 1000
+    30  #define DEFAULT_PORT 1990
+    31  #define NUMBER_OF_PAGES_TO_SERVE 2140000000
+    32  // after serving this many pages the server will halt
+    33  // apparently this is the largest number a int-32 can be
+    34  #define MAX_ITERATIONS 256
+    35  #define URL_REQUEST_INDEX 5
+    36  #define ASCII_FOR_X 88
+    37  #define BMP_SIZE 786432 //512 pixels x 512 pixels x 3 bytes per colour
+    38  #define HEADER_SIZE 54
+    39
+    40  int main (int argc, char *argv[]) {
+    41     printf ("************************************\n");
+    42     printf ("Starting simple server %f\n", SIMPLE_SERVER_VERSION);
+    43     printf ("Serving bmps since 2012\n");
+    44
+    45     int serverSocket = makeServerSocket (DEFAULT_PORT);
+    46     printf ("Access this server at http://localhost:%d/\n", DEFAULT_PORT);
+    47     printf ("************************************\n");
+    48
+    49     char request[REQUEST_BUFFER_SIZE];
+    50
+    51     int numberServed = 0;
+    52     while (numberServed < NUMBER_OF_PAGES_TO_SERVE) {
+    53
+    54        printf ("*** So far served %d pages ***\n", numberServed);
+    55
+    56        int connectionSocket = waitForConnection (serverSocket);
+    57        // wait for a request to be sent from a web browser, open a new
+    58        // connection for this conversation
+    59
+    60        // read the first line of the request sent by the browser
+    61        int bytesRead;
+    62        bytesRead = read (connectionSocket, request, (sizeof request)-1);
+    63        assert (bytesRead >= 0);
+    64        // were we able to read any data from the connection?
+    65
+    66        // print entire request to the console
+    67        printf (" *** Received http request ***\n %s\n", request);
+    68
+    69        double centreX = 0;
+    70        double centreY = 0;
+    71        int zoom = 0;
+    72        // read from HTTP GET request
+    73        // if specific tile is request, initiate bmp server
+    74        if (request[URL_REQUEST_INDEX] == ASCII_FOR_X){
+    75           sscanf(request, "GET /X-%lf-%lf-%d", &centreX, &centreY, &zoom);
+    76           printf (" *** Sending http response ***\n");
+    77           serveBMP(connectionSocket,centreX,centreY,zoom);
+    78        } else{
+    79        // otherwise use the interactive mandelbrot browser
+    80           serveHTML(connectionSocket);
+    81        }
+    82
+    83        // close the connection after sending the page
+    84        close(connectionSocket);
+    85
+    86        numberServed++;
+    87     }
+    88
+    89     // close the server connection after we are done
+    90     printf ("** shutting down the server **\n");
+    91     close (serverSocket);
+    92
+    93     return EXIT_SUCCESS;
+    94  }
+    95  static void serveHTML (int socket){
+    96     char* message;
+    97
+    98     // first send the http response header
+    99     message =
+   100        "HTTP/1.0 200 Found\n"
+   101        "Content-Type: text/html\n"
+   102        "\n";
+   103     printf ("about to send=> %s\n", message);
+   104     write (socket, message, strlen (message));
+   105
+   106     message = "<html><script src=\"https://openlearning.cse.unsw.edu.au/site_media/viewer/tile.min.js\"></script></html>";
+   107  //   serveBMP(socket,centreX,centreY,zoom);
+   108     write (socket, message, strlen (message));
+   109
+   110  }
+   111
+   112  void serveBMP (int socket, double centreX, double centreY, int zoom) {
+   113     char* message;
+   114
+   115     // first send the http response header
+   116
+   117     // (if you write stings one after another like this on separate
+   118     // lines the c compiler kindly joins them togther for you into
+   119     // one long string)
+   120     message = "HTTP/1.0 200 OK\r\n"
+   121                  "Content-Type: image/bmp\r\n"
+   122                  "\r\n";
+   123     printf ("about to send=> %s\n", message);
+   124     write (socket, message, strlen (message));
+   125
+   126     // now send the BMP
+   127     unsigned char bmp[BMP_SIZE + HEADER_SIZE] = {
+   128       0x42,0x4D,0x36,0x00,0x0C,0x00,0x00,0x00,
+   129       0x00,0x00,0x36,0x00,0x00,0x00,0x28,0x00,
+   130       0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x02,
+   131       0x00,0x00,0x01,0x00,0x18,0x00,0x00,0x00,
+   132       0x00,0x00,0x00,0x00,0x0C,0x00,0x00,0x00,
+   133       0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+   134       0x00,0x00,0x00,0x00,0x00,0x00};
+   135     // end of header of the BMP
+   136
+   137     int i = 0;
+   138     int x, y;
+   139     color pixelColor;
+   140     // hex editor edits pixels right to left, top to bottom
+   141     // also works with BGR values, not RGB
+   142     // we go through every pixel between -256 to 255, which
+   143     // is in total 512 pixels
+   144     for(y=-256;y<256;y++){
+   145       for(x=-256; x<256;x++){
+                            ^
+                            + ============= +
+                            + Magic numbers +
+                            + ============= +
+   146           // call the function pixelColor to determine what to colour
+   147           // the current pixel as
+   148           pixelColor = mandelbrotPixelColor(x, y, centreX, centreY, zoom);
+   149
+   150           // add the colours from pixelColor to the bmp array
+   151           bmp[i+HEADER_SIZE] = pixelColor.blue;
+   152           bmp[i+1+HEADER_SIZE] = pixelColor.green;
+   153           bmp[i+2+HEADER_SIZE] = pixelColor.red;
+   154           i += 3;
+   155           // repeat until the bmp array is full, ie. we have coloured
+   156           // all 262144 pixels
+   157        }
+   158     }
+   159     // the web server prints out the
+   160     write (socket, bmp, sizeof(bmp));
+   161  }
+   162
+   163  // start the server listening on the specified port number
+   164  int makeServerSocket (int portNumber) {
+   165
+   166     // create socket
+   167     int serverSocket = socket (AF_INET, SOCK_STREAM, 0);
+   168     assert (serverSocket >= 0);
+   169     // error opening socket
+   170
+   171     // bind socket to listening port
+   172     struct sockaddr_in serverAddress;
+   173     bzero ((char *) &serverAddress, sizeof (serverAddress));
+   174
+   175     serverAddress.sin_family      = AF_INET;
+   176     serverAddress.sin_addr.s_addr = INADDR_ANY;
+   177     serverAddress.sin_port        = htons (portNumber);
+   178
+   179     // let the server start immediately after a previous shutdown
+   180     int optionValue = 1;
+   181     setsockopt (
+   182        serverSocket,
+   183        SOL_SOCKET,
+   184        SO_REUSEADDR,
+   185        &optionValue,
+   186        sizeof(int)
+   187     );
+   188
+   189     int bindSuccess =
+   190        bind (
+   191           serverSocket,
+   192           (struct sockaddr *) &serverAddress,
+   193           sizeof (serverAddress)
+   194        );
+   195
+   196     assert (bindSuccess >= 0);
+   197     // if this assert fails wait a short while to let the operating
+   198     // system clear the port before trying again
+   199
+   200     return serverSocket;
+   201  }
+   202
+   203  // wait for a browser to request a connection,
+   204  // returns the socket on which the conversation will take place
+   205  int waitForConnection (int serverSocket){
+   206     // listen for a connection
+   207     const int serverMaxBacklog = 10;
+   208     listen (serverSocket, serverMaxBacklog);
+   209
+   210     // accept the connection
+   211     struct sockaddr_in clientAddress;
+   212     socklen_t clientLen = sizeof (clientAddress);
+   213     int connectionSocket =
+   214        accept (
+   215           serverSocket,
+   216           (struct sockaddr *) &clientAddress,
+   217           &clientLen
+   218        );
+   219
+   220     assert (connectionSocket >= 0);
+   221     // error on accept
+   222
+   223     return (connectionSocket);
+   224  }
+   225
+   226  color mandelbrotPixelColor(double testXPoint, double testYPoint, double centreX, double centreY, int zoom){
+               ^
+               + ====================================== +
+               + Every function needs to have a comment +
+               + ====================================== +
+   227     int iterations = 0;
+   228     double xtemp;
+   229     double x = 0;
+   230     double y = 0;
+   231     // (testXPoint, testYPoint) is the point on the complex plane we're are trying to test
+   232     // hence we need to scale the point down with respect to the zoom level
+   233     testXPoint = ldexp(testXPoint, -zoom) + centreX;
+   234     testYPoint = ldexp(testYPoint, -zoom) + centreY;
+   235     // if the modulus of the complex number (testXPoint,testYPoint) is < 4 after 256
+   236     // iterations, its highly probably that it is in the mandelbrot set
+   237     while (x*x + y*y < 4 && iterations < MAX_ITERATIONS){
+   238        xtemp = x*x - y*y + testXPoint;
+   239        y = 2*x*y + testYPoint;
+   240        x = xtemp;
+   241        iterations++;
+   242     }
+   243
+   244     // the colour smoothing formula is taken from the wikipedia article
+   245     // about the mandelbrot set
+   246     // en.wikipedia.org/wiki/Mandelbrot_set#Continuous_.28smoothing.29_colouring
+   247     double colorSmoothing;
+   248     colorSmoothing = iterations - log2(log10(fabs(x*x + y*y))/log10(pow(10,100)));
+                              ^
+                              + ====================================================== +
+                              + Maybe this should be done in the get colour functions? +
+                              + ====================================================== +
+   249
+   250     color pixelColor;
+   251     // we call upon the functions in pixelColor.c to calculate colours
+   252     // based of the number of iterations it took for a point to escape
+   253     // the mandelbrot set
+   254     pixelColor.red = stepsToRed(iterations)*colorSmoothing;
+   255     pixelColor.green = stepsToGreen(iterations)*colorSmoothing;
+   256     pixelColor.blue = stepsToBlue(iterations)*colorSmoothing;
+   257
+   258     return pixelColor;
+   259  }
+
+
+===============================================================================
+-rw-r----- 1 cs1917 cs1917 2651 2012-04-30 16:11 pixelColor.c
+===============================================================================
+
+     1  /*
+     2   * Calculates the colour of individual pixels of the
+     3   * mandelbrot set based on the number of iterations
+     4   * taken for a point to either leave the mandelbrot
+     5   * set or enough iterations that it is certainly part
+     6   * of the set
+     7   *
+     8   * Created by Vincent Tran and Tony San
+     9   */
+    10
+    11  #include "pixelColor.h"
+    12  #include <math.h>
+    13
+    14  #define ORIGIN 0
+    15  #define FIRST_OCTANT 32
+    16  #define SECOND_OCTANT 64
+    17  #define THIRD_OCTANT 96
+    18  #define FOURTH_OCTANT 128
+    19  #define FIFTH_OCTANT 160
+    20  #define SIXTH_OCTANT 192
+    21  #define SEVENTH_OCTANT 224
+    22  #define REVOLUTION 256
+    23
+    24  // divide the maximum number of iterations (256) into 8 portions
+    25  // for each octant, we want a certain colour
+    26  // some octants will have the same colour as the previous
+    27  // octant however
+    28
+    29  unsigned char stepsToRed (int steps){
+    30          unsigned char redValue;
+    31          if (steps >= ORIGIN && steps < FIRST_OCTANT){
+    32                  redValue = 0;
+    33          } else if (steps >= FIRST_OCTANT && steps < SECOND_OCTANT){
+    34                  redValue = steps/5;
+    35          } else if (steps >= SECOND_OCTANT && steps < THIRD_OCTANT){
+    36                  redValue = steps/4;
+    37          } else if (steps >= THIRD_OCTANT && steps < FOURTH_OCTANT){
+    38                  redValue = steps/3;
+    39          } else if (steps >= FOURTH_OCTANT && steps < FIFTH_OCTANT){
+    40                  redValue = steps/2;
+    41          } else if (steps >= FIFTH_OCTANT && steps < SIXTH_OCTANT){
+    42                  redValue = steps;
+    43          } else if (steps >= SIXTH_OCTANT && steps < SEVENTH_OCTANT){
+    44                  redValue = steps;
+    45          } else { // steps will be between the 7th and 8th octant
+    46                  redValue = 0;
+    47          }
+    48          return redValue;
+    49  }
+    50
+    51  unsigned char stepsToGreen (int steps){
+    52          unsigned char greenValue;
+    53          if (steps >= ORIGIN && steps < FIRST_OCTANT){
+    54                  greenValue = 0;
+    55          } else if (steps >= FIRST_OCTANT && steps < FOURTH_OCTANT){
+    56                  greenValue = steps/2;
+    57          } else if (steps >= FOURTH_OCTANT && steps < FIFTH_OCTANT){
+    58                  greenValue = steps + 70;
+    59          } else if (steps >= FIFTH_OCTANT && steps < SEVENTH_OCTANT){
+    60                  greenValue = 255 - steps/2;
+    61          } else if (steps >= SEVENTH_OCTANT && steps < REVOLUTION){
+    62                  greenValue = 255 - steps;
+    63          } else { // if steps == 256 <==> 0
+    64                  greenValue = 0;
+    65          }
+    66          return greenValue;
+    67  }
+    68
+    69  unsigned char stepsToBlue (int steps){
+    70          unsigned char blueValue;
+    71
+    72          if (steps >= ORIGIN && steps < FIRST_OCTANT){
+    73                  blueValue = steps*2;
+    74          } else if (steps >= FIRST_OCTANT && steps < SECOND_OCTANT){
+    75                  blueValue = steps*2;
+    76          } else if (steps >= SECOND_OCTANT && steps < FOURTH_OCTANT){
+    77                  blueValue = steps;
+    78          } else if (steps >= FOURTH_OCTANT && steps < FIFTH_OCTANT){
+    79                  blueValue = steps + 70;
+    80          } else if (steps >= FIFTH_OCTANT && steps < SEVENTH_OCTANT){
+    81                  blueValue = 255 - steps;
+    82          } else if (steps >= SEVENTH_OCTANT && steps < REVOLUTION){
+    83                  blueValue = 255 - steps;
+    84          } else { // if steps == 256 <==> 0
+    85                  blueValue = 0;
+    86          }
+    87          return blueValue;
+    88  }
+    89
+
+#define DEFAULT_PORT 1990
+Attempting to change DEFAULT_PORT to 7191 regardless of port number used ...
+
+
+Compiling with -Wall -Werror -O -lm ...
+
+
+** Compiled OK with Compiler Options -Wall -Werror -O -lm
+
+Running server ...
+
+Downloading X--1.0-0.5-8.bmp ...
+--2012-04-30 16:11:44--  http://localhost:7191/X--1.0-0.5-8.bmp
+Resolving localhost... 127.0.0.1
+Connecting to localhost|127.0.0.1|:7191... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [image/bmp]
+Saving to: `X--1.0-0.5-8.bmp'
+
+     0K .......... .......... .......... .......... ..........  181K
+    50K .......... .......... .......... .......... ..........  124M
+   100K .......... .......... .......... .......... ..........  195M
+   150K .......... .......... .......... .......... ..........  178M
+   200K .......... .......... .......... .......... ..........  125M
+   250K .......... .......... .......... .......... ..........  209M
+   300K .......... .......... .......... .......... ..........  209M
+   350K .......... .......... .......... .......... ..........  177M
+   400K .......... .......... .......... .......... .......... 97.5M
+   450K .......... .......... .......... .......... ..........  211M
+   500K .......... .......... .......... .......... ..........  207M
+   550K .......... .......... .......... .......... ..........  194M
+   600K .......... .......... .......... .......... ..........  121M
+   650K .......... .......... .......... .......... ..........  194M
+   700K .......... .......... .......... .......... ..........  223M
+   750K .......... ........                                     122M=0.3s
+
+2012-04-30 16:11:44 (2.68 MB/s) - `X--1.0-0.5-8.bmp' saved [786486]
+
+Downloading X--0.03170-0.65258-15.bmp ...
+--2012-04-30 16:11:44--  http://localhost:7191/X--0.03170-0.65258-15.bmp
+Resolving localhost... 127.0.0.1
+Connecting to localhost|127.0.0.1|:7191... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [image/bmp]
+Saving to: `X--0.03170-0.65258-15.bmp'
+
+     0K .......... .......... .......... .......... ..........  172K
+    50K .......... .......... .......... .......... ..........  194M
+   100K .......... .......... .......... .......... ..........  226M
+   150K .......... .......... .......... .......... ..........  111M
+   200K .......... .......... .......... .......... ..........  216M
+   250K .......... .......... .......... .......... ..........  210M
+   300K .......... .......... .......... .......... ..........  217M
+   350K .......... .......... .......... .......... ..........  106M
+   400K .......... .......... .......... .......... ..........  154M
+   450K .......... .......... .......... .......... ..........  218M
+   500K .......... .......... .......... .......... ..........  195M
+   550K .......... .......... .......... .......... ..........  123M
+   600K .......... .......... .......... .......... ..........  179M
+   650K .......... .......... .......... .......... ..........  206M
+   700K .......... .......... .......... .......... ..........  222M
+   750K .......... ........                                     119M=0.3s
+
+2012-04-30 16:11:44 (2.55 MB/s) - `X--0.03170-0.65258-15.bmp' saved [786486]
+
+
+!!section tests
+!!section assess
+
+ -- Style --
+5 = HD perfect style, cannot be improved.
+4 = DN very good style, a couple of small improvements could be made.
+3 = CR OK style, several places where it could be better
+2.5 = PS barely satisfactory, many places that need improvement
+2 or less = FL unsatisfactory -- your code is a mess that is very difficult to follow
+
+!!nospecialmark  (Style)                                        4/5      <== mark altered (no original mark)
+
+!!marktab       **  MARKER'S  ASSESSMENT  **
+
+                   X--1.0-0.5-8   ..  ..  (10)  10
+
+                   X--0.03170-0.65258-15  (10)  10
+
+!!finalmark     **  FINAL  ASSIGNMENT  MARK:    24/25
+
+San, Tony                               vtra143
+Tran, Vincent                           vtra143
+
+
+
+
+
+
+
+
+
+
+
+
+
+Marked by adrianr on Fri May 11 12:35:23 2012
+

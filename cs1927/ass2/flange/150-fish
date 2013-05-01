@@ -1,0 +1,30 @@
+polyline :: [(Num, Num)] -> [Shape]
+polyline pts =
+  match pts with
+      []   -> []
+    | p:ps ->
+        let mkP :: (Num, Num) -> [(Num, Num)] -> [Shape]
+            mkP prev qqs =
+              match qqs with
+                  []   -> [] -- Don't close the polygon.
+                | q:qs -> (Line prev q) : (mkP q qs)
+              end ;
+         in mkP p ps
+  end
+;
+
+leftFish :: Picture
+leftFish =
+    Canvas 1 1
+      ((Line (1/8, 3/5) (1, 4/5)) : (polyline [ (1, 1), (1/8, 3/5), (1, 1/8), (3/4, 0), (1, 0)]))
+;
+
+rightFish :: Picture
+rightFish = Flip leftFish
+;
+
+fish :: Picture
+fish = Beside 1 1 leftFish rightFish
+;
+
+main = fish

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<session>
+  <history>
+    <bookmark name="exam2008" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/cs1917/exam2008"/>
+    <bookmark name="cs1917" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/cs1917"/>
+    <bookmark name="Network" icon="gnome-fs-network" uri="network:"/>
+    <bookmark name="Computer" icon="gnome-fs-client" uri="computer:///"/>
+    <bookmark name="vtra143" icon="user-home" uri="file:///import/ravel/2/vtra143"/>
+  </history>
+</session>

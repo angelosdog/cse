@@ -1,0 +1,25 @@
+base :: Picture
+base =  Canvas 100 100 ([Rectangle (20,20) (80,80)])
+;
+
+roof :: Picture
+roof = Canvas 100 100 ([Line (10,80) (90,80), Line (10,80) (50,95), Line (50,95) (90,80)])
+;
+
+door :: Picture
+door =  Canvas 100 100 ([Rectangle (40,20) (60,65)])
+;
+
+windows :: Picture
+windows =  Canvas 100 100 ([Rectangle (25, 40) (35,50), Rectangle (65, 40) (75,50)])
+;
+
+doorknob :: Picture
+doorknob = Canvas 100 100 ([Circle (57,43) 1])
+;
+
+house :: Picture
+house = Overlay (Overlay (Overlay roof (Overlay doorknob door)) windows) base
+;
+
+main = house

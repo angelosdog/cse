@@ -1,0 +1,1 @@
+main = Flip (Canvas 100 100 [Line (20, 20) (80, 80)])

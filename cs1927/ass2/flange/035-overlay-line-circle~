@@ -1,0 +1,1 @@
+main = Overlay (Circle (50, 50) 20) (Line (20, 20) (80, 80))

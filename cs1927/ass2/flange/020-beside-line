@@ -1,0 +1,5 @@
+line :: Picture
+line = Canvas 100 100 [Line (20, 20) (80, 80)]
+;
+
+main = Beside 1 1 line line

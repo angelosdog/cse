@@ -1,0 +1,24 @@
+data Tree = Leaf Num | Node Num Tree Tree
+
+drawTree :: Tree -> Picture
+drawTree t = match t with
+		Leaf n -> node
+		| Node m left right
+		-> Above 1 1 node (Above 1 1 branch (Beside 1 1 (drawTree left) (drawTree right)))
+	   	end
+;
+
+node :: Picture
+node = Canvas 100 100 [(Circle (50,50) 50)]
+;
+
+branch :: Picture
+branch = Canvas 100 100 [Line (50,100) (75,0), Line (50,100) (25,0)]
+;
+
+tree :: Tree
+tree = Node 3 (Leaf 1) (Leaf 1)
+;
+
+main = drawTree (Node 3 (Node 3 (Leaf 1) (Leaf 1)) (Leaf 1))
+

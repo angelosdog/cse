@@ -1,0 +1,4 @@
+rectangle :: Picture
+rectangle = Canvas 100 100 [Rectangle (20,20) (50,80
+
+main = rectangle

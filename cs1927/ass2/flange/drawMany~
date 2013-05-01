@@ -1,0 +1,33 @@
+row :: [Picture] -> Picture
+row pps =
+  let mkP :: [Picture] -> (Picture, Num)
+      mkP pps = match pps with
+                    []   -> (Empty, 0)
+                  | p:ps -> match mkP ps with (pic, n) -> (Beside 1 n p pic, n + 1) end
+                end ;
+  in match mkP pps with (p, n) -> p end
+;
+
+column :: [Picture] -> Picture
+column pps =
+  let mkP :: [Picture] -> (Picture, Num)
+      mkP pps = match pps with
+                    []   -> (Empty, 0)
+                  | p:ps -> match mkP ps with (pic, n) -> (Above 1 n p pic, n + 1) end
+                end ;
+  in match mkP pps with (p, n) -> p end
+;
+
+drawMany :: Picture -> [Picture] -> Picture
+drawMany op pps = match op with
+			  Above m n p q -> column pps
+		        | Beside m n p q -> row pps
+			end
+;
+
+circle :: Picture
+circle = Canvas 100 100 [(Circle (50,50) 50)]
+;
+
+main = drawMany (Beside 1 1 circle circle) [circle, circle, circle, circle]
+

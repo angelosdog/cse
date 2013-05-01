@@ -1,0 +1,10 @@
+circle :: Picture
+circle = Canvas 100 100 [Circle (50, 50) 20]
+;
+
+
+circle2 :: Picture
+circle2 = Canvas 100 100 [Circle (50, 50) 40]
+;
+
+main = Overlay circle circle2

@@ -1,0 +1,150 @@
+-- Compute the convex hull, following Sedgewick's "Algorithms", 2nd
+-- Edition, 1988, Chapter 25 "Finding the convex hull".  This is the
+-- "wrapping" algorithm.
+
+-- The central intuition is to find a point on the hull (pick an
+-- extremal one) and then wrap a line around the set of points,
+-- "folding" it whenever it hits a vertex.
+
+abs :: Num -> Num
+abs x = if x < 0 then 0 - x else x end
+;
+delete :: (Num, Num) -> [(Num, Num)] -> [(Num, Num)]
+delete n xxs =
+  match xxs with
+      []   -> []
+    | x:xs -> if n == x then delete n xs else x : delete n xs end
+  end
+;
+
+-- Approximate tan^{-1} (dy / dx) (taking one point as the origin, the
+-- angle to the other.)
+
+theta :: (Num, Num) -> (Num, Num) -> Num
+theta p1 p2 =
+  match p1 with (x1, y1) -> match p2 with (x2, y2) ->
+    let dx :: Num
+        dx = x2 - x1 ;
+        dy :: Num
+        dy = y2 - y1 ;
+        t :: Num
+        t = if dx == 0 && dy == 0 then 0 else dy / (abs dx + abs dy) end ;
+    in 90.0 * (if dx < 0 then 2 - t else if dy < 0 then 4 + t else t end end)
+ end end 
+;
+
+-- Find the point with the minimal y value. This point must be on the hull.
+-- "aux" unpacks the pair to make life easier.
+
+findMinY :: [(Num, Num)] -> (Num, Num)
+findMinY ps =
+  let aux :: Num -> Num -> [(Num, Num)] -> (Num, Num)
+      aux minX minY pps =
+        match pps with
+            []   -> (minX, minY)
+          | p:ps -> match p with (x, y) -> if y < minY then aux x y ps else aux minX minY ps end end
+        end ;
+  in match ps with p:ps -> match p with (x, y) -> aux x y ps end end
+;
+
+-- One step: find a point that has the smallest angle (theta-value) at
+-- least as big as the given one with respect to the given point. One
+-- could imagine doing this more efficiently.
+
+findMin :: (Num, Num) -- Current point
+        -> Num        -- Current minimum angle
+        -> (Num, Num) -- Best new point
+        -> Num        -- Best new minimum angle
+        -> [(Num, Num)] -> (Num, (Num, Num))
+findMin p0 min bp bmin pps =
+  match pps with
+      []   -> (bmin, bp)
+    | p:ps -> let t :: Num
+                  t = theta p0 p ;
+              in if t > min && t < bmin
+                   then findMin p0 min p t ps
+                   else findMin p0 min bp bmin ps
+                 end
+  end
+;
+
+-- Iterate until we're back at the start.
+
+convexHull :: [(Num, Num)] -> [(Num, Num)]
+convexHull ps =
+  let startp :: (Num, Num)
+      startp = findMinY ps ;
+
+      aux :: (Num, Num) -> Num -> [(Num, Num)] -> [(Num, Num)]
+      aux p0 min ps =
+        p0 : (match findMin p0 min startp 360 ps with
+                      (min1, p2) -> if p2 == startp
+                                      then []
+                                      else aux p2 min1 (delete p2 ps)
+                                    end
+        end) ;
+  in aux startp 0 ps
+;
+
+----------------------------------------
+
+-- Generate a set of random points in a (10, 10) - (110, 110) box.
+
+randomInit :: Num
+randomInit = 78
+;
+
+randomPoints :: Num -> [(Num, Num)]
+randomPoints n =
+  let aux :: Num -> Num -> [(Num, Num)]
+      aux m s = if m == 0
+                  then []
+                  else let x :: Num
+                           x = random s ;
+                           y :: Num
+                           y = random x ;
+                       in (10 + x % 100, 10 + y % 100) : aux (m - 1) y
+                end ;
+  in aux n randomInit
+;
+
+points :: [(Num, Num)]
+points = randomPoints 90
+;
+
+pointsToCircles :: Num -> [(Num, Num)] -> [Shape]
+pointsToCircles r pps =
+  match pps with
+      []   -> []
+    | p:ps -> Circle p r : pointsToCircles r ps
+  end
+;
+
+pointsPicture :: Picture
+pointsPicture = Canvas 120 120 (pointsToCircles 1 points)
+;
+
+----------------------------------------
+
+-- Draw the convex hull.
+
+polygon :: [(Num, Num)] -> [Shape]
+polygon pts =
+  match pts with
+      []   -> []
+    | p:ps ->
+        let mkP :: (Num, Num) -> [(Num, Num)] -> [Shape]
+            mkP prev qqs =
+              match qqs with
+                  []   -> [Line prev p] -- Close the polygon.
+                | q:qs -> (Line prev q) : (mkP q qs)
+              end ;
+         in mkP p ps
+  end
+;
+
+chPicture :: Picture
+chPicture = Canvas 120 120 (polygon (convexHull points))
+;
+
+main = Overlay pointsPicture chPicture

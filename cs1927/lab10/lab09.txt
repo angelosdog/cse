@@ -1,0 +1,32 @@
+A fellow coworker has written some code, and is having some real difficulty. He just cant get his dictionary program to work. 
+
+He cant work out why its broken, he is using your managers code for a list, so that couldnt be wrong right?
+
+So you offer to help and improve it:
+   * First by finding the problems and fixing them
+   * Making sure that the code frees memory
+   * Then by adding in a little extra functionality
+
+===The new functionality===
+Whenever the user enters a new word [use scanf("%s", someString)] your program should print "yes" if youve seen the word before
+else "no". And you program should end if they enter an empty string.
+
+===The old program===
+Uses a hash map to store strings that are read in, and queries this hash map if it contains data seen before.
+You believe that the main program works except missing the new functionality, and that the hash map has some 
+problems freeing memory, and its dependant dodgyList.c doesnt free things properly or even work like a list.
+
+| 1 Mark | Program that reads in strings, enters them in the hash map and replies querying the hash map | 
+| 1 Mark | Correct hash map | 
+| 1 Mark | All used memory freed before program termination |
+
+===How to Run/Test===
+
+gcc -Wall -Werror -o main main.c hashTable.c dodgyList.c stringItem.c
+
+./main < someMoreInput > output
+
+diff -y output expectedOutput
+
+===The code === 
+

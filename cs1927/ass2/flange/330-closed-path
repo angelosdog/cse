@@ -1,0 +1,151 @@
+-- Compute a simple closed polygon for the set of points, following
+-- Sedgewick's "Algorithms", 2nd Edition, 1988, Chapter 24 "Elementary
+-- Geometric Methods".
+
+abs :: Num -> Num
+abs x = if x < 0 then 0 - x else x end
+;
+append :: [(Num, (Num, Num))] -> [(Num, (Num, Num))] -> [(Num, (Num, Num))]
+append xxs ys =
+  match xxs with
+      []   -> ys
+    | x:xs -> x : (append xs ys)
+  end
+;
+map :: ((Num, Num) -> (Num, (Num, Num))) -> [(Num, Num)] -> [(Num, (Num, Num))]
+map f xxs =
+  match xxs with
+      []   -> []
+    | x:xs -> f x : map f xs
+  end
+;
+
+-- Quicksort.
+
+partition :: Num -> [(Num, (Num, Num))] -> ([(Num, (Num, Num))], [(Num, (Num, Num))])
+partition x yys =
+  match yys with
+      []   -> ([], [])
+    | y:ys ->
+        match partition x ys with
+	  (les, gs) ->
+            match y with (yVal, yPoint) ->
+              if x < yVal then (les, y:gs) else (y:les, gs) end
+            end
+        end
+  end
+;
+
+qsort :: [(Num, (Num, Num))] -> [(Num, (Num, Num))]
+qsort xxs =
+  match xxs with
+      []   -> []
+    | x:xs ->
+        match x with (xVal, xPoint) ->
+          match partition xVal xs with
+            (les, gs) -> append (qsort les) (append (x:[]) (qsort gs))
+          end
+        end
+  end
+;
+
+----------------------------------------
+
+-- Approximate tan^{-1} (dy / dx) (taking one point as the origin, the
+-- angle to the other.)
+
+theta :: (Num, Num) -> (Num, Num) -> Num
+theta p1 p2 =
+  match p1 with (x1, y1) -> match p2 with (x2, y2) ->
+    let dx :: Num
+        dx = x2 - x1 ;
+        dy :: Num
+        dy = y2 - y1 ;
+        t :: Num
+        t = if dx == 0 && dy == 0 then 0 else dy / (abs dx + abs dy) end ;
+    in 90.0 * (if dx < 0 then 2 - t else if dy < 0 then 4 + t else t end end)
+ end end 
+;
+
+-- Taking the first point as an "anchor", compute the theta (approx
+-- angle) from that point to every other.
+
+thetas :: [(Num, Num)] -> [(Num, (Num, Num))]
+thetas pps = match pps with anchor:ps ->
+    let f :: (Num, Num) -> (Num, (Num, Num))
+        f p = (theta anchor p, p) ;
+    in (0, anchor) : map f ps
+  end
+;
+
+-- Sort the points by theta values.
+
+scp :: [(Num, Num)] -> [(Num, Num)]
+scp ps =
+  let mapSnd :: [(Num, (Num, Num))] -> [(Num, Num)]
+      mapSnd xxs = match xxs with [] -> [] | x:xs -> match x with (a, b) -> b : mapSnd xs end end ;
+  in mapSnd (qsort (thetas ps))
+;
+
+----------------------------------------
+
+-- Generate a set of random points in a (10, 10) - (110, 110) box.
+
+randomInit :: Num
+randomInit = 195625
+;
+
+randomPoints :: Num -> [(Num, Num)]
+randomPoints n =
+  let aux :: Num -> Num -> [(Num, Num)]
+      aux m s = if m == 0
+                  then []
+                  else let x :: Num
+                           x = random s ;
+                           y :: Num
+                           y = random x ;
+                       in (10 + x % 100, 10 + y % 100) : aux (m - 1) y
+                end ;
+  in aux n randomInit
+;
+
+points :: [(Num, Num)]
+points = randomPoints 80
+;
+
+pointsToCircles :: Num -> [(Num, Num)] -> [Shape]
+pointsToCircles r pps =
+  match pps with
+      []   -> []
+    | p:ps -> Circle p r : pointsToCircles r ps
+  end
+;
+
+pointsPicture :: Picture
+pointsPicture = Canvas 120 120 (pointsToCircles 1 points)
+;
+
+----------------------------------------
+
+-- Draw the simple closed polygon.
+
+polygon :: [(Num, Num)] -> [Shape]
+polygon pts =
+  match pts with
+      []   -> []
+    | p:ps ->
+        let mkP :: (Num, Num) -> [(Num, Num)] -> [Shape]
+            mkP prev qqs =
+              match qqs with
+                  []   -> [Line prev p] -- Close the polygon.
+                | q:qs -> (Line prev q) : (mkP q qs)
+              end ;
+         in mkP p ps
+  end
+;
+
+scpPicture :: Picture
+scpPicture = Canvas 120 120 (polygon (scp points))
+;
+
+main = Overlay pointsPicture scpPicture

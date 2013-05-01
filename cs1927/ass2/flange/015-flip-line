@@ -1,0 +1,1 @@
+main = Beside 1 1 (Flip (Canvas 100 100 [Line (20, 20) (80, 80)])) (Canvas 100 100 [Line (20, 20) (80, 80)])

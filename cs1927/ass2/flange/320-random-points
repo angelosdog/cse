@@ -1,0 +1,37 @@
+-- Generate a set of random points in a (10, 10) - (110, 110) box.
+
+randomInit :: Num
+randomInit = 195625
+;
+
+randomPoints :: Num -> [(Num, Num)]
+randomPoints n =
+  let aux :: Num -> Num -> [(Num, Num)]
+      aux m s = if m == 0
+                  then []
+                  else let x :: Num
+                           x = random s ;
+                           y :: Num
+                           y = random x ;
+                       in (10 + x % 100, 10 + y % 100) : aux (m - 1) y
+                end ;
+  in aux n randomInit
+;
+
+pointsToCircles :: Num -> [(Num, Num)] -> [Shape]
+pointsToCircles r pps =
+  match pps with
+      []   -> []
+    | p:ps -> Circle p r : pointsToCircles r ps
+  end
+;
+
+points :: [(Num, Num)]
+points = randomPoints 80
+;
+
+pointsPicture :: Picture
+pointsPicture = Canvas 120 120 (pointsToCircles 1 points)
+;
+
+main = pointsPicture

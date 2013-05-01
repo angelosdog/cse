@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<session>
+  <history>
+    <bookmark name="Computer" icon="gnome-fs-client" uri="computer:///"/>
+    <bookmark name="vmware" icon="gnome-fs-directory" uri="file:///export/banjo07/1/vmware"/>
+    <bookmark name="1" icon="gnome-fs-directory" uri="file:///export/banjo07/1"/>
+    <bookmark name="public_html" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/public_html"/>
+    <bookmark name="python_env" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/python_env"/>
+    <bookmark name="shoutout" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/shoutout"/>
+    <bookmark name="projectEuler" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/projectEuler"/>
+    <bookmark name="mail" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/mail/mail"/>
+    <bookmark name="mail" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/mail"/>
+    <bookmark name="Downloads" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/Downloads"/>
+    <bookmark name="GNUstep" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/GNUstep"/>
+    <bookmark name="Desktop" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/Desktop"/>
+    <bookmark name="ACM" icon="gnome-fs-directory" uri="file:///import/ravel/2/vtra143/ACM"/>
+    <bookmark name="vtra143" icon="user-home" uri="file:///import/ravel/2/vtra143"/>
+  </history>
+  <window type="spatial" location="computer:///"/>
+</session>

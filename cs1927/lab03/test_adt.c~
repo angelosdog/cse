@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "Item.h"
+#include "adt.h"
+
+int main(int argc, char* argv[]){
+  LISTinit();
+  LISTafter(10);
+  LISTafter(12);
+  LISTbefore(11);
+  printf("Moved -1. %d\n", LISTmove(-1));
+  printf("Moved 2. %d\n", LISTmove(2));
+  printf("Deleted %d\n",LISTdelete());
+  printf("Now at %d\n", LISTcurrent());
+  LISTmove(-1);
+  printf("Now at %d\n", LISTcurrent());
+  printf("Deleted %d\n", LISTdelete());
+  printf("Now at %d\n", LISTcurrent());
+  printf("Deleted %d\n", LISTdelete());
+  return EXIT_SUCCESS;
+}
