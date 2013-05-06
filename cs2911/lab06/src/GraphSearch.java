@@ -46,6 +46,9 @@ public class GraphSearch {
 	}
 	
 	private static Integer ucs(String start, String end, Graph g) {
+		for(Vertex v : g.getVertices()) {
+			v.setCost(0);
+		}
 		Queue<Vertex> nextTowns = new LinkedList<Vertex>();
 		ArrayList<Vertex> toAdd = new ArrayList<Vertex>();
 		ArrayList<Vertex> visited = new ArrayList<Vertex>();
@@ -119,7 +122,7 @@ public class GraphSearch {
 		g.addEdge("Hirsova", "Eforie", 86);
 		g.addEdge("Urziceni", "Vaslui", 142);
 		g.addEdge("Vaslui", "Iasi", 92);
-		g.addEdge("Iasi", "Nearnt", 71);
+		g.addEdge("Iasi", "Neamt", 71);
 		return g;
 	}
 
