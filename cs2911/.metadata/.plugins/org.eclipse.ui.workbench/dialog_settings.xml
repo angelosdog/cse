@@ -4,11 +4,11 @@
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
-			<item value="/home/vintage/uni/COMP2911/CourierDelivery/src"/>
+			<item value="/tmp_amd/ravel/export/ravel/2/vtra143/mailgui"/>
+			<item value="/tmp_amd/ravel/export/ravel/2/vtra143/cse/cs2911/lab06/src"/>
 			<item value="/tmp_amd/ravel/export/ravel/2/vtra143/comp2911/lab06/Graph/src"/>
 			<item value="/tmp_amd/ravel/export/ravel/2/vtra143/comp2911/lab05/Car"/>
 			<item value="/tmp_amd/ravel/export/ravel/2/vtra143/comp2911/lab04/Directed Graphs/src"/>
-			<item value="/tmp_amd/ravel/export/ravel/2/vtra143/comp2911/lab03"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
@@ -25,20 +25,17 @@
 	</section>
 	<section name="WorkbenchPreferenceDialogSettings">
 		<item value="0" key="DIALOG_Y_ORIGIN"/>
-		<item value="0" key="DIALOG_X_ORIGIN"/>
-	</section>
-	<section name="InstallationDialogSettings">
-		<item value="696" key="DIALOG_WIDTH"/>
-		<item value="0" key="DIALOG_Y_ORIGIN"/>
-		<item value="15" key="DIALOG_X_ORIGIN"/>
-		<item value="743" key="DIALOG_HEIGHT"/>
-		<item value="1|Sans|9.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="396" key="DIALOG_X_ORIGIN"/>
 	</section>
 	<section name="ImportExportAction">
 		<item value="org.eclipse.ui.wizards.import.FileSystem" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
 		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
 			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.jst.ejb.ui"/>
 			<item value="org.eclipse.equinox.p2.category"/>
+			<item value="org.eclipse.jst.j2ee.internal"/>
+			<item value="org.eclipse.rse.importexport.importWizards"/>
+			<item value="org.eclipse.wst.web.ui"/>
 		</list>
 	</section>
 </section>

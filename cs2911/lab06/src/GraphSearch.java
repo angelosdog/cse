@@ -10,10 +10,28 @@ public class GraphSearch {
 	public static void main(String[] args) {
 		Graph g = constructRomania();
 		
-		String start = "Arad";
 		String end = "Bucharest";
-		System.out.println(bfs(start, end, g));
-		System.out.println(ucs(start, end, g));
+		System.out.println(bfs("Arad", end, g));
+		System.out.println("Arad: " + ucs("Arad", end, g));
+		System.out.println("Bucharest: " + ucs("Bucharest", end, g));
+		System.out.println("Craiova: " + ucs("Craiova", end, g));
+		System.out.println("Dobreta: " + ucs("Dobreta", end, g));
+		System.out.println("Eforie: " + ucs("Eforie", end, g));
+		System.out.println("Fagaras: " + ucs("Fagaras", end, g));
+		System.out.println("Giurgiu: " + ucs("Giurgiu", end, g));
+		System.out.println("Hirsova: " + ucs("Hirsova", end, g));
+		System.out.println("Iasi: " + ucs("Iasi", end, g));
+		System.out.println("Lugoj: " + ucs("Lugoj", end, g));
+		System.out.println("Mehadia: " + ucs("Mehadia", end, g));
+		System.out.println("Neamt: " + ucs("Neamt", end, g));
+		System.out.println("Oradea: " + ucs("Oradea", end, g));
+		System.out.println("Pitesti: " + ucs("Pitesti", end, g));
+		System.out.println("Rimnicu Vilcea: " + ucs("Rimnicu Vilcea", end, g));
+		System.out.println("Sibiu: " + ucs("Sibiu", end, g));
+		System.out.println("Timisoara: " + ucs("Timisoara", end, g));
+		System.out.println("Urziceni: " + ucs("Urziceni", end, g));
+		System.out.println("Vaslui: " + ucs("Vaslui", end, g));
+		System.out.println("Zerind: " + ucs("Zerind", end, g));
 	
 	}
 	
@@ -46,6 +64,9 @@ public class GraphSearch {
 	}
 	
 	private static Integer ucs(String start, String end, Graph g) {
+		for (Vertex v : g.getVertices()) {
+			v.setCost(0);
+		}
 		Queue<Vertex> nextTowns = new LinkedList<Vertex>();
 		ArrayList<Vertex> toAdd = new ArrayList<Vertex>();
 		ArrayList<Vertex> visited = new ArrayList<Vertex>();
@@ -54,6 +75,7 @@ public class GraphSearch {
 		nextTowns.add(from);
 		from = nextTowns.poll();
 		do {
+			//System.out.println(from.getValue());
 			if (from == to) {
 				return from.getCost();
 			}
@@ -62,7 +84,7 @@ public class GraphSearch {
 					if(visited.contains(from.getEdges().get(i).getTo()) == false){
 						Vertex next = from.getEdges().get(i).getTo();
 						toAdd.add(next);
-						next.setCost(from.getCost() + from.getEdges().get(i).getWeight());
+						next.setCost(from.getCost() + 1);
 					}
 				}
 			}
@@ -119,7 +141,7 @@ public class GraphSearch {
 		g.addEdge("Hirsova", "Eforie", 86);
 		g.addEdge("Urziceni", "Vaslui", 142);
 		g.addEdge("Vaslui", "Iasi", 92);
-		g.addEdge("Iasi", "Nearnt", 71);
+		g.addEdge("Iasi", "Neamt", 71);
 		return g;
 	}
 

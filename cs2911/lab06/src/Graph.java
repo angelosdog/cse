@@ -204,4 +204,8 @@ public class Graph {
 		}
 		return string.toString();
 	}
+	
+	public LinkedList<Vertex> getVertices() {
+		return this.vertices;
+	}
 }
