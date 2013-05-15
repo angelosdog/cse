@@ -64,7 +64,11 @@ public class GraphSearch {
 	}
 	
 	private static Integer ucs(String start, String end, Graph g) {
+<<<<<<< HEAD
 		for (Vertex v : g.getVertices()) {
+=======
+		for(Vertex v : g.getVertices()) {
+>>>>>>> 4c6d56c605eed9c98d5ec87d12e16f5b90d97270
 			v.setCost(0);
 		}
 		Queue<Vertex> nextTowns = new LinkedList<Vertex>();

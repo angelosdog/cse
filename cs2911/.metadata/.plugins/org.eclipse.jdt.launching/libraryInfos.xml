@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <libraryInfos>
+<<<<<<< HEAD
 <libraryInfo home="/usr/lib/jvm/java-6-openjdk/jre" version="1.6.0_18">
 <bootpath>
 <entry path="/usr/lib/jvm/java-6-openjdk/jre/lib/resources.jar"/>
@@ -20,6 +21,9 @@
 </endorsedDirs>
 </libraryInfo>
 <libraryInfo home="/usr/lib/jvm/java-6-openjdk" version="1.7.0_21">
+=======
+<libraryInfo home="/usr/lib/jvm/java-7-openjdk-amd64" version="1.7.0_21">
+>>>>>>> 4c6d56c605eed9c98d5ec87d12e16f5b90d97270
 <bootpath>
 <entry path="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/resources.jar"/>
 <entry path="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar"/>

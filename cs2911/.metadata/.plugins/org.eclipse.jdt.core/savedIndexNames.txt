@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.126+/tmp_amd/ravel/export/ravel/2/vtra143/cse/cs2911/.metadata/.plugins/org.eclipse.jdt.core
 89269160.index
 2253339857.index
@@ -20,4 +21,17 @@ INDEX VERSION 1.126+/tmp_amd/ravel/export/ravel/2/vtra143/cse/cs2911/.metadata/.
 2889915287.index
 566748905.index
 3223902160.index
+=======
+INDEX VERSION 1.126+/home/vintage/cse/cs2911/.metadata/.plugins/org.eclipse.jdt.core
+1571501549.index
+767672674.index
+1522987508.index
+2467731135.index
+89269160.index
+3013956801.index
+3298976855.index
+2623238674.index
+4252550006.index
+3033043160.index
+>>>>>>> 4c6d56c605eed9c98d5ec87d12e16f5b90d97270
 3285164110.index
