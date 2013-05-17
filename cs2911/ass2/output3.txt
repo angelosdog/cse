@@ -1,5 +1,5 @@
-12270
-1167
+12270 nodes explored
+cost = 1167
 Move from 0 0 to 16 42
 Carry from 16 42 to 13 77
 Move from 13 77 to 26 86

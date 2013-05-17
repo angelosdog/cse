@@ -1,5 +1,5 @@
-21
-20
+21 nodes explored
+cost = 20
 Carry from 0 0 to 0 1
 Carry from 0 1 to 1 1
 Carry from 1 1 to 2 1

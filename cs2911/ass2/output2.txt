@@ -1,5 +1,5 @@
-4352
-37
+4352 nodes explored
+cost = 37
 Carry from 0 0 to 0 0
 Carry from 0 0 to 0 1
 Move from 0 1 to 0 0

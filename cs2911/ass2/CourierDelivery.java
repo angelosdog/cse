@@ -91,8 +91,8 @@ public class CourierDelivery {
 	 * @param path the order of the jobs that were taken
 	 */
 	private static void printPath(int explored, int cost, LinkedList<Job> path) {
-		System.out.println(explored);
-		System.out.println(cost);
+		System.out.println(explored + " nodes explored");
+		System.out.println("cost = " + cost);
 		if(path.size() > 0) {
 			Point current = new Point(0,0);
 			Job nextJob = path.poll();

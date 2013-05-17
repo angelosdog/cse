@@ -1,5 +1,5 @@
-6780
-84068
+6780 nodes explored
+cost = 84068
 Move from 0 0 to 18 87
 Carry from 18 87 to 432 281
 Move from 432 281 to 445 522
