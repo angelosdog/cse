@@ -1,0 +1,22 @@
+21
+20
+Carry from 0 0 to 0 1
+Carry from 0 1 to 1 1
+Carry from 1 1 to 2 1
+Carry from 2 1 to 2 2
+Carry from 2 2 to 3 2
+Carry from 3 2 to 3 3
+Carry from 3 3 to 4 3
+Carry from 4 3 to 4 4
+Carry from 4 4 to 5 4
+Carry from 5 4 to 5 5
+Carry from 5 5 to 6 5
+Carry from 6 5 to 6 6
+Carry from 6 6 to 7 6
+Carry from 7 6 to 7 7
+Carry from 7 7 to 8 7
+Carry from 8 7 to 8 8
+Carry from 8 8 to 9 8
+Carry from 9 8 to 9 9
+Carry from 9 9 to 10 9
+Carry from 10 9 to 10 10

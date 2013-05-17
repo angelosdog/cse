@@ -1,0 +1,20 @@
+4352
+37
+Carry from 0 0 to 0 0
+Carry from 0 0 to 0 1
+Move from 0 1 to 0 0
+Carry from 0 0 to 1 2
+Move from 1 2 to 0 0
+Carry from 0 0 to 1 0
+Move from 1 0 to 0 0
+Carry from 0 0 to 2 0
+Move from 2 0 to 0 0
+Carry from 0 0 to 0 2
+Move from 0 2 to 0 0
+Carry from 0 0 to 0 3
+Move from 0 3 to 0 0
+Carry from 0 0 to 1 1
+Move from 1 1 to 0 0
+Carry from 0 0 to 3 0
+Move from 3 0 to 0 0
+Carry from 0 0 to 2 1

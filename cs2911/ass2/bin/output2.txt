@@ -1,6 +1,0 @@
-5
-15
-Move from 0 0 to 3 3
-Carry from 3 3 to 5 3
-Move from 5 3 to 3 5
-Carry from 3 5 to 2 7

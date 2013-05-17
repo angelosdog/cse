@@ -1,0 +1,26 @@
+6780
+84068
+Move from 0 0 to 18 87
+Carry from 18 87 to 432 281
+Move from 432 281 to 445 522
+Carry from 445 522 to 2652 149
+Move from 2652 149 to 5911 520
+Carry from 5911 520 to 11 456
+Move from 11 456 to 156 1422
+Carry from 156 1422 to 113 717
+Move from 113 717 to 286 867
+Carry from 286 867 to 159 129
+Move from 159 129 to 2964 545
+Carry from 2964 545 to 2 602
+Move from 2 602 to 4 7041
+Carry from 4 7041 to 23 511
+Move from 23 511 to 9211 5451
+Carry from 9211 5451 to 220 615
+Move from 220 615 to 724 4418
+Carry from 724 4418 to 238 951
+Move from 238 951 to 2129 959
+Carry from 2129 959 to 1224 533
+Move from 1224 533 to 1257 570
+Carry from 1257 570 to 2219 52
+Move from 2219 52 to 4911 12
+Carry from 4911 12 to 0 0

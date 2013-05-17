@@ -1,0 +1,26 @@
+12270
+1167
+Move from 0 0 to 16 42
+Carry from 16 42 to 13 77
+Move from 13 77 to 26 86
+Carry from 26 86 to 19 19
+Move from 19 19 to 17 50
+Carry from 17 50 to 29 5
+Move from 29 5 to 49 1
+Carry from 49 1 to 16 61
+Move from 16 61 to 18 87
+Carry from 18 87 to 43 28
+Move from 43 28 to 74 48
+Carry from 74 48 to 38 91
+Move from 38 91 to 29 99
+Carry from 29 99 to 24 33
+Move from 24 33 to 29 54
+Carry from 29 54 to 20 60
+Move from 20 60 to 91 54
+Carry from 91 54 to 20 65
+Move from 20 65 to 41 70
+Carry from 41 70 to 22 51
+Move from 22 51 to 45 52
+Carry from 45 52 to 26 49
+Move from 26 49 to 59 50
+Carry from 59 50 to 11 4
