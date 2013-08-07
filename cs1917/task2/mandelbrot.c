@@ -103,7 +103,7 @@ static void serveHTML (int socket){
    printf ("about to send=> %s\n", message);
    write (socket, message, strlen (message));
 
-   message = "<html><script src=\"https://openlearning.cse.unsw.edu.au/site_media/viewer/tile.min.js\"></script></html>";
+   message = "<html><script src=\"https://almondbread.openlearning.com/tileviewer.js\"></script></html>";
 //   serveBMP(socket,centreX,centreY,zoom);
    write (socket, message, strlen (message));
    

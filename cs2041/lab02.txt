@@ -1,0 +1,190 @@
+== Question 1 == 
+a) What word is on line 2000 
+
+Answer: Algonquian
+
+
+b) the first word in the dictionary file ending with 's
+
+Answer: A's
+
+
+c) the last word in the dictionary that contains the substring ooz ?
+
+Answer: zoozoos
+
+d) What are the first the last and the longest?
+
+Pipeline: cat mywords | grep a.*e.*i.*o.*u.*
+Answer: first -> abstemious, last -> valerianaceous, longest --> supercalifragisticexpialidocious
+
+e) How many are there?
+
+53
+
+f) Modified regex (optional)?
+
+Pipeline: cat mywords | grep a[^aeiou]*e[^aieou]*i[^aeiou]*o[^aeiou]*u[^aeiou]*
+Answer: 14
+
+== Question 2 == 
+a) How many total words does the file contain?  
+
+Command: cat mywords | wc -l
+Answer: 390583
+
+b) How many total words, excluding those ending in "'s", are there in the dictionary?
+
+Pipeline: grep -v \'s mywords | wc -l
+Answer: 299841
+
+c) How could you use cat -n and grep to find out which word is on line 100000? 
+
+Pipeline: cat -n mywords | grep 100000
+Answer: adviser
+
+d) How could you use cat -n and grep to print the 700th line, and no other lines?
+
+Pipeline: cat -n mywords | grep -w 700
+Answer: 700 Adirondack
+
+
+e) How do you use head and tail to find out what word is on line 200000 
+
+Pipeline: cat mywords | head -200000 | tail -1
+Answer: geodynamics's
+
+== Question 3 == 
+a) which words contain the characters "lmn" consecutively?
+
+Pipeline: cat mywords | grep lmn
+Answer: Selmner
+      Selmner's
+      almner
+      almners
+      calmness
+      calmness's
+      calmnesses
+
+b) how many words contain "zz", but do not end in apostrophe-s ('s)?
+
+Pipeline: cat mywords | grep zz | grep -v \'s | wc -l
+Answer: 628
+
+c) how many words contain four consecutive vowels?
+
+Pipeline: cat mywords | egrep [aeiou]{4} mywords | wc -l
+Answer: 205
+
+d) how many words have a 9-letter dictionary word embedded inside them.
+
+Pipeline: egrep '^[A-Za-z]{9}$' mywords > words9  
+          fgrep -f words9 mywords | grep -v \' | grep -v '.{9}' | wc -l
+Answer: 73221
+
+
+== Question 4 == 
+
+a) Write a grep command that will print all the lines in the file where the electorate begins with W.
+Pipeline: grep 'for [Ww].*$' parliament.txt
+Answer: 9
+
+b) Write a grep command that will list all the lines in the file where the MP's first name is Andrew. 
+
+Pipeline: grep 'Andrew ' parliament.txt
+Answer: 5
+
+
+c) Write a grep command that will print all the lines in the file with three consecutive vowels.
+
+Pipeline: grep -E [AEIOUaeiou]{3} parliament.txt
+Answer: 1
+
+d) Write a grep command that will print all the lines in the file where the MP's surname (last name) ends in the letter 'y'.
+
+Pipeline: grep -E 'y,' parliament.txt
+Answer: 11
+
+e) Write a grep command that will print all the lines in the file where the electorate ends in the letter 'y'.
+
+Pipeline: grep -E 'y[ ]*$' parliament.txt
+Answer: 16
+
+f) Write a grep command to print all the lines in the file where there is a word in the MP's name or the electorate name ending in ng.
+
+Pipeline: grep -E 'ng[ ,]|ng[ ]*$' parliament.txt
+Answer: 7
+
+g) Write a grep command that will print all the lines in the file where the MP's surname (last name) both begins and ends with a vowel. 
+
+Pipeline: grep -E ' [AEIOU][^ ]*[aeiou],' parliament.txt
+Answer: 1
+
+h) Write a grep command that will print all the lines in the file where the electorate name contains multiple words (separated by spaces or hyphens). 
+
+Pipeline: grep -E 'for [^ ]+[ -][A-Za-z]+' parliament.txt
+Answer: 8
+
+== Question 5 == 
+
+Write a shell pipline which prints the 2nd most common MP first name. 
+
+Pipeline: cut -d, -f1 parliament.txt | sed 's/The Hon/Mr/g' | cut -d " " -f2 | sort | uniq -c | sort -r | head -2 | tail -1
+Answer: Andrew
+
+== Question 6 ==
+
+a) How many total classes are there?
+
+Pipeline: cat classes.txt | wc -l
+Answer: 316
+
+b) How many different courses have classes?
+
+Pipeline: cut -f1 classes.txt | sort | uniq | wc -l
+Answer: 22
+
+
+c) Write a pipeline which will print the course with the most classes?
+
+Pipeline: cut -f1 classes.txt | sort|  uniq -c | tail -1
+Answer: ENGG1811
+
+d) Give a command line that prints the most frequently-used tut room? 
+
+Pipeline: "TUT|TLB" classes.txt | cut -f5 | sort | uniq -c | sort | tail -1
+Answer: Quad G040
+
+e) Give a command line that prints the most popular time-of-day for tutes? 
+
+Pipeline: egrep "TUT|TLB" classes.txt | cut -f4 | sort | uniq -c | sort | tail -1
+Answer: Thu 09-10
+
+f) Which COMP courses run the most simultaneous classes of the same type? 
+
+Pipeline: 
+Answer: 
+
+g) Write a pipeline that prints list of the course names (only) of COMP courses that run simultaneous classes of the same type?
+
+Pipeline:
+Answer:
+
+== Question 7 (Challenge) ==
+
+a) Match any line containing at least one A and at least one B.
+
+Regexp:
+
+b) Match any line any line containing only the characters A and B such that all pairs of adjacent As occur before any pairs of adjacent Bs
+
+Regexp:
+
+c) Match any line containing  only the characters A and B such that all number of A's is divisible by 4.
+
+Regexp:
+
+d) Match any line containing n As followed by n Bs and no other characters..
+
+Regexp/script:
+
