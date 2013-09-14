@@ -10,7 +10,7 @@ foreach $file (glob "poets/*.txt") {
         
         $count += $line =~  m/\b$ARGV[0]\b/ig;
     }
-    $frequency = $count/$words;
+    $frequency = log($count+1/$words);
     $file =~ s/^poets\///;
-    printf "%4d/%6d = %.9f %s\n", $count,$words, $frequency, $file;
+    printf "log((%d+1)/%6d) = %8.4f %s\n", $count,$words, $frequency, $file;
 }
