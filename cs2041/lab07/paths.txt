@@ -1,0 +1,10 @@
+Parkes Canowindra    112
+Parkes Dubbo          57
+Canowindra Gilgandra  13
+Canowindra Dubbo      25
+Gilgandra Bourke      43
+Dubbo Canowindra      35
+Dubbo Gilgandra       91
+Dubbo Bourke          23
+Bourke Parkes         71
+Bourke Gilgandra      62
