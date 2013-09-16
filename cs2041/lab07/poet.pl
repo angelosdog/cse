@@ -9,10 +9,8 @@ foreach $file (glob "poets/*.txt") {
     $length = 0;
     while($line = <F>) {
         $line =~ tr/A-Z/a-z/;
-        $line =~ s/[^a-z]/ /g;
-        next if ($line =~ m/^\s*$/);
-        chomp $line;
         @words = split(/[^A-Za-z]+/, $line);
+        @words = grep(!/^\s*$/, @words);
         $poems{$file}{$length} += @words;
         for $word (@words) {
             $poems{$file}{$wc}{$word}+=1;
@@ -20,6 +18,7 @@ foreach $file (glob "poets/*.txt") {
     }
     close F;
 }
+
 $debug = 0;
 if ($ARGV[0] eq "-d") {
     shift @ARGV;
@@ -31,10 +30,8 @@ foreach $f (@ARGV) {
     open(F,"<$f") or die "$0: Can't open $f: $!\n";
     while($line = <F>) {
         $line =~ tr/A-Z/a-z/;
-        $line =~ s/[^a-z]/ /g;
-        next if ($line =~ m/^\s*$/);
-        chomp $line;
         @words_in_line = split(/[^A-Za-z]+/, $line);
+        @words_in_line = grep(!/^\s*$/, @words_in_line);
         for $word (@words_in_line) {
             if($words{$word} == 0) {
                 $words{$word}++;
@@ -43,13 +40,13 @@ foreach $f (@ARGV) {
         }
     }
     close F;
+
     %log_probabilities = ();
     foreach $poet (keys %poems) {
         $probability = 0;
         foreach $word (keys %words) {
             $probability += log(($poems{$poet}{$wc}{$word}+=1)/($poems{$poet}{$length}));
         }
-        
         $log_probabilities{$poet} = $probability;
     }
     @logs = sort{$log_probabilities{$a} cmp $log_probabilities{$b}} keys %log_probabilities;

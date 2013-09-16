@@ -6,9 +6,8 @@ foreach $file (glob "poets/*.txt") {
     $length = 0;
     while($line = <F>) {
         $line =~ tr/A-Z/a-z/;
-        #$line =~ s/[^a-z]/ /g;
-        next if ($line =~ m/^\s*$/);
         @words = split(/[^A-Za-z]+/, $line);
+        @words = grep(!/^\s*$/, @words);
         $length += @words;
         for $word (@words) {
             $wc{$word}++;
